@@ -14,11 +14,18 @@ def j_up(x,l):
     else:
         return j0(x)
     
-x=np.linspace(0,50,250)
-i=0
-plt.plot(x,j_up(x,i),label="{}".format(i))
+x=np.arange(0.2,50.2,0.2,np.longdouble)
+i=10
+
+
+print("x vs j{}(x) is given below:".format(i))
+for k in x:
+    print("{}   {}".format(round(k,2),j_up(k,i)))
+
+
+plt.plot(x,j_up(x,i),label="j{}(x)".format(i))
+plt.xlabel('x')
+plt.ylabel('value of j{}(x)'.format(i))
 plt.legend()
+plt.grid()
 plt.show()
-
-
-
