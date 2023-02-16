@@ -67,6 +67,7 @@ def dfn(x):
 
 #the main part
 tol=0.000000000001
+print("\nWith the tolarance = {}, we find the root in different method:\n".format(tol))
 print("The root found using NR method is {}, with {} number of iteration".format(NR_rt(fn,dfn,1.2,tol)[0],NR_rt(fn,dfn,1.2,tol)[1]))
 print("The root found using secant method is {}, with {} number of iteration".format(sec_rt(fn,0.8,1.2,tol)[0],sec_rt(fn,0.8,1.2,tol)[1]))
 print("The root found using bisection method is {}, with {} number of iteration".format(bisec_rt(fn,0.8,1.2,tol)[0],bisec_rt(fn,0.8,1.2,tol)[1]))        
