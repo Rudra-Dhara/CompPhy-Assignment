@@ -23,11 +23,7 @@ h_array=np.array(h_list)
 x=np.sqrt(2) #taking the derivative at perticular x vlue
 
 #part b
-print('PART B: h vs single precision defivative and double precision derivative respectively:')
-for h in h_list:
-    print('{:.4e}       {:.4f}      {:.4f}'.format(h,dF2c(np.arctan,x,h),dF3c(np.arctan,x,h)))
 
-print("\n\n\n\n")
 
 #this part will show the value of derivative with different values of h
 print('PART B: h vs single precision defivative and double precision derivative respectively:')
