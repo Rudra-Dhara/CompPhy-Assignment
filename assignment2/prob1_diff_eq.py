@@ -43,7 +43,6 @@ list_of_xlst=[]
 for n in n_values:
     h = 1/(n)
     x = np.linspace(0,1, n+1) #x values with different interval 
-    print(len(x))
     #the tridiagnolan matrix diagonals
     main_diag = -2*np.ones(n-1)
     off_diag = np.ones(n-1)   
@@ -55,21 +54,24 @@ for n in n_values:
     #solving u
     u = tdma_solver(off_diag, main_diag, off_diag, b)
     u= list(u)
-    u.insert(0,0)
-    u.append(0)
     
-    print(len(x),len(u))
     # relative error list and x (storing the different lists due to different n within the loop)
-    u_err= np.log10(np.absolute((u- exact(x))/exact(x)))
-    u_err= list(u_err) #converting data type to list
-    x==list(x) # converting data tupe to list
+    u_err= []
+    for i in range(len(u)):
+        u_err.append(np.log10(abs((u[i]-exact(x[i+1])/exact(x[i+1])))))# plus one added as the boundary value of soln is not included here
+                     
     list_of_errlst.append(u_err)
     list_of_xlst.append(x)
+
+    #inserting the boundary values of u
+    u.insert(0,0)
+    u.append(0)
 
     # Plot the numerical solution and the exact solution
     plt.plot(x, u, label='Numerical solution for {}'.format(n))
     
     
+
 # Part c
 plt.plot(x, exact(x), label='Exact solution')
 plt.legend()
@@ -81,11 +83,18 @@ plt.show()
 
 
 #Part d 
+
+#finding the maximum relative error
+max_err=[]
+h_list=[]
 for i in range(len(n_values)):
-    plt.plot(list_of_xlst[i],list_of_errlst[i],label=' error for n = {}'.format(n_values[i]))
-plt.title('The relative error(in log scale) vs x for different n')
-plt.xlabel('x')
-plt.ylabel('log_{10}(rel err)')
+    h_list.append(np.log10(1/n_values[i]))
+    max_err.append(max(list_of_errlst[i]))
+
+plt.title('The max relative error(in log scale) vs x for different h in log scale')
+plt.plot(h_list,max_err,marker='.',ls=':')
+plt.xlabel('$log_{10}(h)$')
+plt.ylabel('$log_{10}(rel err)$')
 plt.legend()
 plt.grid()
 plt.show()
