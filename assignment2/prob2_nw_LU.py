@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def LU_decomp(A):
     n = len(A)
     L = np.zeros((n, n))
@@ -23,6 +24,7 @@ def LU_decomp(A):
                 L[j][i] = (A[j][i] - sum) / U[i][i]
 
     return [L, U]
+
 
 def LU_solver(A, b):
     L = LU_decomp(A)[0]
@@ -49,15 +51,22 @@ def LU_solver(A, b):
 
 
 #Real problem
-A = np.array([[1, 0, 0, 1, 0, 0,0],
-              [0, 1, 1, 0, 0, 0,0],
-              [0, 0, 1, -1, -1, 0,0],
-              [1, -1, 0, 0, -1, 0,0],
-              [2, 0, 0, -8, 10, 0,0],
-              [0, 4, -6, 0, -10, 0,0],
-              [2, 4, -6, -8, 0,0,0]])
+A = np.array([[1, 0, 0, 1, 0],
+              [0, 1, 1, 0, 0],
+              [0, 0, 1, -1, -1],
+              [2, 0, 0, -8, 10],
+              [0, 4, -6, 0, -10]])
+
 
 # Initialize vector b
-b = np.array([1, 1, 0, 0, 0, 0, 0])
+b = np.array([1, 1, 0, 0, 0])
 
-print(LU_solver(A,b))
+#output part
+print('\nThe solution for different I(s) are given below:\n')
+for i in range (len(b)):
+    print('I{} = {}'.format(i+1,LU_solver(A,b)[i]))
+
+
+print('\n\nThe decomposited L and U are:\n')
+print('L = {}\n\nU = {}'.format(LU_decomp(A)[0],LU_decomp(A)[1]))
+          
