@@ -33,7 +33,7 @@ def exact(x):
     return x*(1-x)*np.exp(x)
 
 # Define the grid and step size h
-n_values = [10, 100, 1000, 10**4,10**6]
+n_values = [10, 100, 1000, 10**4,10**5,10**6]
 
 
 #part a
