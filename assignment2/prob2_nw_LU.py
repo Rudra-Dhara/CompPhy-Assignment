@@ -1,29 +1,23 @@
 import numpy as np
 
 
-def LU_decomp(A):
+def lu_pivot(A):
     n = len(A)
-    L = np.zeros((n, n))
-    U = np.zeros((n, n))
-
-    # Decomposition
+    L = [[0 for i in range(n)] for j in range(n)]
+    U = [[0 for i in range(n)] for j in range(n)]
+    P = [[1 if i == j else 0 for i in range(n)] for j in range(n)]
     for i in range(n):
-        for j in range(i, n):
-            sum = 0
-            for k in range(i):
-                sum += L[i][k] * U[k][j]
-            U[i][j] = A[i][j] - sum
+        pivot_row = max(range(i,n), key=lambda k: abs(A[k][i]))
+        if pivot_row != i:
+            A[i], A[pivot_row] = A[pivot_row], A[i]
+            P[i], P[pivot_row] = P[pivot_row], P[i]
+        U[i][i] = A[i][i] - sum(L[i][k] * U[k][i] for k in range(i))
+        for j in range(i+1,n):
+            L[j][i] = (A[j][i] - sum(L[j][k] * U[k][i] for k in range(i))) / U[i][i]
+        for j in range(i+1,n):
+            U[i][j] = (A[i][j] - sum(L[i][k] * U[k][j] for k in range(i))) / L[i][i]
+    return [L, U, P]
 
-        for j in range(i, n):
-            if i == j:
-                L[i][i] = 1
-            else:
-                sum = 0
-                for k in range(i):
-                    sum += L[j][k] * U[k][i]
-                L[j][i] = (A[j][i] - sum) / U[i][i]
-
-    return [L, U]
 
 
 def LU_solver(A, b):
