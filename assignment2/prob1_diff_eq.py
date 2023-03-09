@@ -57,7 +57,8 @@ for n in n_values:
     # relative error list and x (storing the different lists due to different n within the loop)
     u_err= []
     for i in range(len(u)):
-        u_err.append(np.log10(abs((u[i]-exact(x[i+1])/exact(x[i+1])))))# plus one added as the boundary value of soln is not included here
+        err=abs(((u[i]-exact(x[i+1]))/exact(x[i+1])))
+        u_err.append(np.log10(err))# plus one added as the boundary value of soln is not included here
                      
     list_of_errlst.append(u_err)
     list_of_xlst.append(x)
