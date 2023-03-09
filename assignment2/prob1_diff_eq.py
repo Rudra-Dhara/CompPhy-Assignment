@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Here, a, b, and c are the diagonal, main diagonal, and subdiagonal entries, d is lhs of the eqn
-#this code written by taking the help of the internet
 def tdma_solver(a, b, c, d):
     n = len(b)
      
