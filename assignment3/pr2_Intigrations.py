@@ -37,7 +37,9 @@ def gauss_legendre(f, a, b, n,*args):
     x, w = np.polynomial.legendre.leggauss(n+1)  #x is the point and w is the weight list of the function
     xp = (b-a)/2*x + (b+a)/2
     wp = (b-a)/2*w
-    I = np.sum(wp*f(xp,*args))
+    I=0
+    for i in range(n+1):
+        I+= wp[i]*f(xp[i],*args)
     return I
 
 
@@ -66,7 +68,7 @@ for n in N:
     print(f"Gauss-Legendre quadrature with {n} mesh points: I = {I:.6f}")
 
 
-
+print('\n\n')
 
 
 
@@ -132,6 +134,15 @@ def simpson_2d(f, a, b, c, d, Nx, Ny):
 
     return I
 
+def gauss_legendre_2d(f, a, b, c, d, Nx, Ny):
+    y, w = np.polynomial.legendre.leggauss(Ny+1)  #x is the point and w is the weight list of the function
+    yp = (d-c)/2*y + (d+c)/2
+    wp = (d-c)/2*w
+    I = 0
+    for i in range(Ny+1):
+        I += wp[i]*gauss_legendre(f,a,b,Nx,yp[i])
+    return I
+
 for n in N:
     I = trapz2d(integrand,x_min,x_max,y_min,y_max,n,n)
     print(f"Trapezoidal 2d rule with {n} mesh points: I = {I:.6f}")
@@ -142,4 +153,7 @@ for n in N:
     print(f"SImpson 2d rule with {n} mesh points: I = {I:.6f}")
 print('\n')
 
-    
+for n in N:
+    I = gauss_legendre_2d(integrand,x_min,x_max,y_min,y_max,n,n)
+    print(f"Gauss 2d rule with {n} mesh points: I = {I:.6f}")
+print('\n')    
