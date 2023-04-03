@@ -12,18 +12,32 @@ def trapezoidal(f, a, b, n):
     return I
 
 #  Simpson's rule
-def simpson(f, a, b, n):
-    x = np.linspace(a, b, n+1)
-    dx = (b-a)/n
-    I = dx/3 * (f(a) + 4*np.sum(f(x[1:n:2])) + 2*np.sum(f(x[2:n-1:2])) + f(b))
-    return I
+def simpson(f,x0,xn,n,*args):
+    # calculating step size
+    h = (xn - x0) / n
+    
+    # Finding sum 
+    integration = f(x0,*args) + f(xn,*args)
+    
+    for i in range(1,n):
+        k = x0 + i*h
+        
+        if i%2 == 0:
+            integration = integration + 2 * f(k,*args)
+        else:
+            integration = integration + 4 * f(k,*args)
+    
+    # Finding final integration value
+    integration = integration * h/3
+    
+    return integration
 
 #  Gauss-Legendre quadrature
-def gauss_legendre(f, a, b, n):
+def gauss_legendre(f, a, b, n,*args):
     x, w = np.polynomial.legendre.leggauss(n+1)  #x is the point and w is the weight list of the function
     xp = (b-a)/2*x + (b+a)/2
     wp = (b-a)/2*w
-    I = np.sum(wp*f(xp))
+    I = np.sum(wp*f(xp,*args))
     return I
 
 
@@ -97,4 +111,35 @@ def trapz2d(f, a, b, c, d, nx=1000, ny=1000):
     
     return integral
 
-print(trapz2d(integrand,x_min,x_max,y_min,y_max))
+
+def simpson_2d(f, a, b, c, d, Nx, Ny):
+    hx = (b-a)/Nx
+    hy = (d-c)/Ny
+    
+    x = np.linspace(a, b, Nx+1)
+    y = np.linspace(c, d, Ny+1)
+    
+    
+    integral = 0
+    I=simpson(f,a,b,Nx,y[0])+simpson(f,a,b,Nx,y[-1])
+
+    for i in range(1,Ny):
+            if i%2==0:
+                I += 2*simpson(f,a,b,Nx,y[i])
+            else:
+                I+= 4*simpson(f,a,b,Nx,y[i])
+    I=I*hy/3
+
+    return I
+
+for n in N:
+    I = trapz2d(integrand,x_min,x_max,y_min,y_max,n,n)
+    print(f"Trapezoidal 2d rule with {n} mesh points: I = {I:.6f}")
+print('\n')
+
+for n in N:
+    I = simpson_2d(integrand,x_min,x_max,y_min,y_max,n,n)
+    print(f"SImpson 2d rule with {n} mesh points: I = {I:.6f}")
+print('\n')
+
+    
