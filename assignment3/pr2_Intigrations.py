@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 #integrand function
 def f(x):
@@ -34,13 +35,30 @@ def simpson(f,x0,xn,n,*args):
 
 #  Gauss-Legendre quadrature
 def gauss_legendre(f, a, b, n,*args):
-    x, w = np.polynomial.legendre.leggauss(n+1)  #x is the point and w is the weight list of the function
-    xp = (b-a)/2*x + (b+a)/2
-    wp = (b-a)/2*w
-    I=0
-    for i in range(n+1):
-        I+= wp[i]*f(xp[i],*args)
-    return I
+    x = [0.0] * n     # Roots of Legendre polynomial
+    w = [0.0] * n     # Weights for each root
+    xm = 0.5 * (b + a)   # Midpoint of interval [a,b]
+    xr = 0.5 * (b - a)   # Half-length of interval [a,b]
+    sum = 0.0     # Running sum of the integrand
+    for i in range(n):
+        m = (n + 1) // 2   # Index of midpoint
+        # Compute Legendre polynomial using recurrence relation
+        z = math.cos(math.pi * (i + 0.75) / (n + 0.5))   # Root of Legendre polynomial
+        p1 = 1.0   # Legendre polynomial for i=0
+        p2 = 0.0   # Legendre polynomial for i=-1 (not used)
+        for j in range(1, n + 1):
+            p3 = p2   # Legendre polynomial for i=j-2 (not used)
+            p2 = p1   # Legendre polynomial for i=j-1
+            # Recurrence relation for Legendre polynomial
+            p1 = ((2.0 * j - 1.0) * z * p2 - (j - 1.0) * p3) / j
+        # Compute derivative of Legendre polynomial
+        pp = n * (z * p1 - p2) / (z * z - 1.0)
+        # Compute root and weight
+        x[i] = xm - xr * z   # Root in interval [a,b]
+        w[i] = 2.0 * xr / ((1.0 - z * z) * pp * pp)   # Weight for root
+        # Update running sum
+        sum += w[i] * f(x[i],*args)   # Weighted value of integrand at root
+    return sum
 
 
 
