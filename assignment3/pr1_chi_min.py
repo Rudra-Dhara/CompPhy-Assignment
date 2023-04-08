@@ -2,7 +2,10 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-
+# f - integrand
+# a- lower limit
+# b- upper limit
+# n- number of divisions
 def gauss_legendre(f, a, b, n,*args):
     x = [0.0] * n     # Roots of Legendre polynomial
     w = [0.0] * n     # Weights for each root
@@ -29,6 +32,8 @@ def gauss_legendre(f, a, b, n,*args):
 
         sum += w[i] * f(x[i],*args)   # Weighted value of integrand at root
     return sum
+#-------------------------------------------------------------------------------
+#DEFINING THE FUNCTIONS
 
 # Define the density of states function
 def rho(m, A, TH, m0=0.5):
@@ -75,53 +80,64 @@ def chi2(Nexp,exp_list,A,TH,m0=0.5):
     return sum
 
 
-# Define the experimental masses and degeneracies
+# Define the experimental masses
 mes_mass = np.array([0.782, 1.170, 1.282, 1.420, 1.512])
 bar_mass = np.array([0.938, 1.440, 1.535, 1.650, 1.710])
 
+#------------------------------------------------------------
+#solving the problem for baryons and mesons
 
-
-# Define the chi-square function with fixed parameters
+#BARYON
+# the chi-square function with fixed parameters FOR Baryons
 def chi2_fixed_bar(A,TH):
     A, TH 
     bar_mass = np.array([0.938, 1.440, 1.535, 1.650, 1.710])
     return chi2(Nexp_baryons, bar_mass, A, TH, 0.5)
 
+#THE range of the parameters(FOR MESON AND BARYON)
 a_list=np.linspace(0.2,0.32,100)
 th_list=np.linspace(0.2,0.32,100)
 
+#loops to take out the minimum chi
 bar_list_chi=[chi2_fixed_bar(a_list[0],th_list[0]),a_list[0],th_list[0]]
 for a in a_list:
     for th in th_list:
         if bar_list_chi[0]>= chi2_fixed_bar(a,th):
             bar_list_chi= [chi2_fixed_bar(a,th),a,th]
 
-print('For baryons the chi^2, A, TH are given in the respecctive order\n',bar_list_chi)
 
+#MESONS
 
+# the chi-square function with fixed parameters FOR MESONS
 def chi2_fixed_mes(A,TH):
     A, TH 
     mes_mass = np.array([0.782, 1.170, 1.282, 1.420, 1.512])
     return chi2(Nexp_baryons, mes_mass, A, TH, 0.5)
 
-
+#doing the minimization
 mes_list_chi=[chi2_fixed_bar(a_list[0],th_list[0]),a_list[0],th_list[0]]
 for a in a_list:
     for th in th_list:
         if mes_list_chi[0]>= chi2_fixed_mes(a,th):
             mes_list_chi= [chi2_fixed_mes(a,th),a,th]
+
+#printing the values
+print('For baryons the chi^2, A, TH are given in the respecctive order\n',bar_list_chi)
 print('\n\nFor Mesons the chi^2, A, TH are given in the respecctive order\n',mes_list_chi)
+
+
 
 #for the plotting to compare the result
 bar_exp_list=[]
 mes_exp_list=[]
-
+#adding the experimental data to the lists
 for i in range(5):
     bar_exp_list.append(Nexp_baryons(bar_mass[i],bar_mass))
     mes_exp_list.append(Nexp_mesons(mes_mass[i],mes_mass))
 
-mas_list=np.linspace(0.75,1.75,100)
+mas_list=np.linspace(0.75,1.75,100) #alomst continues mass list for theory plot
 
+#plots
 plt.title('Comparition of $N_{Theory}$ and $N_{exp}$ for baryons and mesons')
 
 plt.plot(mas_list,Ntheory(mes_list_chi[1],0.5,mes_list_chi[2],mas_list),label='Meson theory')
