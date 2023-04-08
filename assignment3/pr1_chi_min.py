@@ -1,8 +1,7 @@
 import numpy as np
-from scipy.optimize import minimize
 import math
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d 
+
 
 def gauss_legendre(f, a, b, n,*args):
     x = [0.0] * n     # Roots of Legendre polynomial
@@ -88,8 +87,8 @@ def chi2_fixed_bar(A,TH):
     bar_mass = np.array([0.938, 1.440, 1.535, 1.650, 1.710])
     return chi2(Nexp_baryons, bar_mass, A, TH, 0.5)
 
-a_list=np.linspace(0.2,0.35,100)
-th_list=np.linspace(0.2,0.35,100)
+a_list=np.linspace(0.2,0.32,100)
+th_list=np.linspace(0.2,0.32,100)
 
 bar_list_chi=[chi2_fixed_bar(a_list[0],th_list[0]),a_list[0],th_list[0]]
 for a in a_list:
@@ -97,7 +96,7 @@ for a in a_list:
         if bar_list_chi[0]>= chi2_fixed_bar(a,th):
             bar_list_chi= [chi2_fixed_bar(a,th),a,th]
 
-print(bar_list_chi)
+print('For baryons the chi^2, A, TH are given in the respecctive order\n',bar_list_chi)
 
 
 def chi2_fixed_mes(A,TH):
@@ -111,7 +110,7 @@ for a in a_list:
     for th in th_list:
         if mes_list_chi[0]>= chi2_fixed_mes(a,th):
             mes_list_chi= [chi2_fixed_mes(a,th),a,th]
-print(mes_list_chi)
+print('\n\nFor Mesons the chi^2, A, TH are given in the respecctive order\n',mes_list_chi)
 
 #for the plotting to compare the result
 bar_exp_list=[]
@@ -121,11 +120,16 @@ for i in range(5):
     bar_exp_list.append(Nexp_baryons(bar_mass[i],bar_mass))
     mes_exp_list.append(Nexp_mesons(mes_mass[i],mes_mass))
 
-mas_list=np.linspace(0.1,1.75,100)
+mas_list=np.linspace(0.75,1.75,100)
+
+plt.title('Comparition of $N_{Theory}$ and $N_{exp}$ for baryons and mesons')
+
 plt.plot(mas_list,Ntheory(mes_list_chi[1],0.5,mes_list_chi[2],mas_list),label='Meson theory')
 plt.plot(mes_mass,mes_exp_list,label='Meson exp')
 plt.plot(mas_list,Ntheory(bar_list_chi[1],0.5,bar_list_chi[2],mas_list),label='Baryon theory')
 plt.plot(bar_mass,bar_exp_list,label='Baryon exp')
 
+plt.xlabel('Mass GeV')
+plt.ylabel('cumulent(N)')
 plt.legend()
 plt.show()
