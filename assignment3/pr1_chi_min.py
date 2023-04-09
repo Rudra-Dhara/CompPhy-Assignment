@@ -1,37 +1,8 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import int_fn as int
 
-# f - integrand
-# a- lower limit
-# b- upper limit
-# n- number of divisions
-def gauss_legendre(f, a, b, n,*args):
-    x = [0.0] * n     # Roots of Legendre polynomial
-    w = [0.0] * n     # Weights for each root
-    xm = 0.5 * (b + a)   # Midpoint of interval [a,b]
-    xr = 0.5 * (b - a)   # Half-length of interval [a,b]
-    sum = 0     
-    for i in range(n):
-        # Compute Legendre polynomial using recurrence relation
-        z = math.cos(math.pi * (i + 0.75) / (n + 0.5))   # Root of Legendre polynomial
-        p1 = 1.0   # Legendre polynomial l=0
-        p2 = 0.0   # Legendre polynomial l=-1
-
-        #calculating the  n th odrer legendre
-        for j in range(1, n + 1):
-            p3 = p2   # Legendre polynomial for i=j-2 
-            p2 = p1   # Legendre polynomial for i=j-1
-            # Recurrence relation for Legendre polynomial 
-            p1 = ((2.0 * j - 1.0) * z * p2 - (j - 1.0) * p3) / j
-        # Compute derivative of Legendre polynomial
-        pp = n * (z * p1 - p2) / (z**2 - 1.0)       #taken from the book
-        # Compute root and weight
-        x[i] = xm - xr * z   # Root in interval [a,b]
-        w[i] = 2.0 * xr / ((1.0 - z * z) * pp**2)   # Weight for root
-
-        sum += w[i] * f(x[i],*args)   # Weighted value of integrand at root
-    return sum
 #-------------------------------------------------------------------------------
 #DEFINING THE FUNCTIONS
 
@@ -43,7 +14,7 @@ def rho(m, A, TH, m0=0.5):
 def Ntheory(A, m0, TH, mmax):
     def f(m):
         return rho(m,A,TH,m0)
-    return gauss_legendre(f, 0, mmax, n=10)
+    return int.gauss_legendre(f, 0, mmax, n=10)
 
 # Define the step function
 def step_fn(m, m_i):
