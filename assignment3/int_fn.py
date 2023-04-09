@@ -1,7 +1,8 @@
 import numpy as np
 import math
 
-
+#this function is a general function to do intigral in theree different method
+#you can do double integral using 2d methods 
 
 
 # in the up coming function 

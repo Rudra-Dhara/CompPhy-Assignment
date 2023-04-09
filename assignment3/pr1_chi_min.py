@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import int_fn as int
+import int_fn as int    #importing self definded function
 
 #-------------------------------------------------------------------------------
 #DEFINING THE FUNCTIONS

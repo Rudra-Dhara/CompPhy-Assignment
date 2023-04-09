@@ -1,4 +1,4 @@
-import int_fn as int
+import int_fn as int   #importing self defined function
 
 
 #integrand function
