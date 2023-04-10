@@ -43,28 +43,28 @@ def simpson(f,x0,xn,n,*args):
 #  Gauss-Legendre quadrature
 # here the approximation for for root of legendre function is used and weight from derivative formula
 def gauss_legendre(f, a, b, n,*args):
-    x = [0.0] * n     # Roots of Legendre polynomial
-    w = [0.0] * n     # Weights for each root
+    x = [0] * n     # Roots of Legendre polynomial
+    w = [0] * n     # Weights for each root
     xm = 0.5 * (b + a)   # Midpoint of interval [a,b]
     xr = 0.5 * (b - a)   # Half-length of interval [a,b]
     sum = 0     
     for i in range(n):
         # Compute Legendre polynomial using recurrence relation
         z = math.cos(math.pi * (i + 0.75) / (n + 0.5))   # Root of Legendre polynomial
-        p1 = 1.0   # Legendre polynomial l=0
-        p2 = 0.0   # Legendre polynomial l=-1
+        p1 = 1   # Legendre polynomial l=0
+        p2 = 0   # Legendre polynomial l=-1
 
         #calculating the  n th odrer legendre
         for j in range(1, n + 1):
             p3 = p2   # Legendre polynomial for i=j-2 
             p2 = p1   # Legendre polynomial for i=j-1
             # Recurrence relation for Legendre polynomial 
-            p1 = ((2.0 * j - 1.0) * z * p2 - (j - 1.0) * p3) / j
+            p1 = ((2 * j - 1) * z * p2 - (j - 1) * p3) / j
         # Compute derivative of Legendre polynomial
-        pp = n * (z * p1 - p2) / (z**2 - 1.0)       #taken from the book
+        pp = n * (z * p1 - p2) / (z**2 - 1)       #taken from the book
         # Compute root and weight
         x[i] = xm - xr * z   # Root in interval [a,b]
-        w[i] = 2.0 * xr / ((1.0 - z * z) * pp**2)   # Weight for root
+        w[i] = 2 * xr / ((1 - z * z) * pp**2)   # Weight for root
 
         sum += w[i] * f(x[i],*args)   # Weighted value of integrand at root
     return sum
