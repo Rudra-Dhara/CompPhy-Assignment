@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+#function that do the simulation and give averege over Nruns
+# N0 - number of particle at t = 0
+# lambda_ - decay const
+# dt - time steps
+# Nruns - number of simulation
 def rad_decay(N0:int, lambda_, dt, Nruns):
     #initial conditions
     Nt= N0
