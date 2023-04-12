@@ -18,16 +18,18 @@ N_values = [10**3, 10**4, 10**5]
 # Loop over different values of N
 for N in N_values:
     # (a) Brute force Monte Carlo
-    x_brute = np.random.uniform(a, b, N) # Generate random numbers from uniform distribution
-    integral_brute = np.mean(integrand(x_brute)) * (b - a) # Estimate the integral using the mean of function evaluations
-    
-    # (b) Importance sampling with p(x) = Ae^-x
+    x_brute = np.random.rand(N) # Generate random numbers from uniform distribution
+    integral_brute = np.mean(integrand(x_brute*(b-a))*(b-a))  # Estimate the integral using the mean of function evaluations
+    brute_var = np.var(integrand(x_brute*(b-a))*(b-a))
+
+    # (b) Importance sampling with p(x) = Ae**-x
+    # the transformed variable y(x) is = - ln (1 - x/A)
     A = 1 / (1 - np.exp(-b)) # Calculate the value of A to normalize p(x)
-    x_importance = np.random.exponential(scale=1/A, size=N) # Generate random numbers from exponential distribution with scale 1/A
-    integral_importance = np.mean(integrand(x_importance) / p(x_importance, A)) * (b - a) # Estimate the integral using importance sampling
-    
+    x_imp = -np.log(np.ones_like(x_brute)-x_brute/A) # change of variavle
+    integral_imp = np.mean(integrand(x_imp) / p(x_imp, A)) # Estimate the integral using importance sampling
+    imp_var= np.var(integrand(x_imp) / p(x_imp, A))
     # Print the results
     print(f"For N = {N}:")
-    print(f"Brute force Monte Carlo: {integral_brute:.6f}")
-    print(f"Importance sampling: {integral_importance:.6f}")
+    print(f"Brute force Monte Carlo: {integral_brute:.6f} with sd ={brute_var**0.5:6f}")
+    print(f"Importance sampling: {integral_imp:.6f} with sd={imp_var**0.5:6f}")
     print("-----")
