@@ -25,7 +25,7 @@ for N in N_values:
     # (b) importance sampling with p(x) = Ae**-x
     # the transformed variable y(x) is = - ln (1 - x/A)
     A = 1 / (np.exp(-a) - np.exp(-b)) # Calculate the value of A to normalize p(x)
-    x_imp = -np.log(np.ones_like(x_brute)-x_brute/A) # change of variavle
+    x_imp = -np.log(np.ones_like(x_brute)*np.exp(-a) - x_brute/A) # change of variavle
     integral_imp = np.mean(integrand(x_imp) / p(x_imp, A)) # Estimate the integral using importance sampling
     imp_var= np.var(integrand(x_imp) / p(x_imp, A))
     # Print the results
