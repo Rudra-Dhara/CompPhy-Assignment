@@ -43,6 +43,7 @@ lambda_ = 0.3 # Decay constant
 dt = 0.5* 10**(-3) # Time step
 Nruns = 1000 # Number of runs/events
 
+
 #running the different N0 value
 for N0 in N0_values:
     t_list, Nt_list = rad_decay(N0,lambda_,dt,Nruns)
@@ -54,7 +55,8 @@ for N0 in N0_values:
         sublist.extend([0] * (len(max_Nt) - len(sublist)))
 
     Nt_list= np.array(Nt_list)  #converting it to numpy array
-    
+    #compution the Nexact
+    n_exact= N0* np.exp(-lambda_*np.array(max_t))
     #computing avg
     Nt_avg=np.zeros(len(max_Nt))
     for sl in Nt_list:
@@ -62,7 +64,8 @@ for N0 in N0_values:
     
     Nt_avg =Nt_avg/Nruns #taking < N(t) >
     log_nt_avg=np.log(Nt_avg)
-    plt.plot(max_t,log_nt_avg, label='Decay of {} particles'.format(N0))
+    plt.plot(max_t,log_nt_avg, label='Decay of {} particles simulated'.format(N0))
+    plt.plot(max_t,np.log(n_exact),ls=':', label='EXACT calculated result for {} particles'.format(N0))
 
     #calculating the derivative of the curve ln<N(t)> at t=0, O(h**2) accuracy
     df= -(log_nt_avg[0]-log_nt_avg[len(log_nt_avg)//5])/(dt*(len(log_nt_avg)//5))  # Second-order forward difference formula (accuracy O(h^2))
